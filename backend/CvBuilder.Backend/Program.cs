@@ -185,28 +185,31 @@ app.UseCors(FrontendCorsPolicy);
 // Enable Auth
 app.UseAuthentication();
 
-// Development / Testing fallback: If unauthenticated but X-User-Id is provided, construct ClaimsPrincipal
-app.Use(async (context, next) =>
+// Development fallback ONLY: If running locally in Development and unauthenticated but X-User-Id is provided, construct ClaimsPrincipal
+if (app.Environment.IsDevelopment())
 {
-    if ((context.User?.Identity?.IsAuthenticated != true) &&
-        context.Request.Headers.TryGetValue("X-User-Id", out var devUserIdHeader))
+    app.Use(async (context, next) =>
     {
-        var devUserId = devUserIdHeader.FirstOrDefault();
-        if (!string.IsNullOrWhiteSpace(devUserId))
+        if ((context.User?.Identity?.IsAuthenticated != true) &&
+            context.Request.Headers.TryGetValue("X-User-Id", out var devUserIdHeader))
         {
-            var claims = new[]
+            var devUserId = devUserIdHeader.FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(devUserId))
             {
-                new System.Security.Claims.Claim("sub", devUserId),
-                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, devUserId),
-                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, "Dev User"),
-                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Email, "dev@example.com")
-            };
-            var identity = new System.Security.Claims.ClaimsIdentity(claims, "DevFallbackAuth");
-            context.User = new System.Security.Claims.ClaimsPrincipal(identity);
+                var claims = new[]
+                {
+                    new System.Security.Claims.Claim("sub", devUserId),
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, devUserId),
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Name, "Dev User"),
+                    new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Email, "dev@example.com")
+                };
+                var identity = new System.Security.Claims.ClaimsIdentity(claims, "DevFallbackAuth");
+                context.User = new System.Security.Claims.ClaimsPrincipal(identity);
+            }
         }
-    }
-    await next();
-});
+        await next();
+    });
+}
 
 app.UseAuthorization();
 

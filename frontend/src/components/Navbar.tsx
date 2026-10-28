@@ -72,33 +72,35 @@ export function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center space-x-1 pl-4 border-l border-slate-200 dark:border-slate-800">
-            {navItems.map((item) => {
-              const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname?.startsWith(item.href);
-              const Icon = item.icon;
+          {/* Desktop Nav Links - Only visible when signed in */}
+          <Show when="signed-in">
+            <nav className="hidden md:flex items-center space-x-1 pl-4 border-l border-slate-200 dark:border-slate-800">
+              {navItems.map((item) => {
+                const isActive =
+                  item.href === "/"
+                    ? pathname === "/"
+                    : pathname?.startsWith(item.href);
+                const Icon = item.icon;
 
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  id={`nav-link-${item.name.toLowerCase()}`}
-                  className={cx(
-                    "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
-                    isActive
-                      ? "bg-slate-100 text-blue-600 font-semibold dark:bg-slate-800 dark:text-blue-400"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60"
-                  )}
-                >
-                  <Icon className="size-4 shrink-0" />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    id={`nav-link-${item.name.toLowerCase()}`}
+                    className={cx(
+                      "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+                      isActive
+                        ? "bg-slate-100 text-blue-600 font-semibold dark:bg-slate-800 dark:text-blue-400"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60"
+                    )}
+                  >
+                    <Icon className="size-4 shrink-0" />
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </nav>
+          </Show>
         </div>
 
         {/* Right: User / Auth actions */}
@@ -132,54 +134,58 @@ export function Navbar() {
             </SignInButton>
           </Show>
 
-          {/* Mobile hamburger button */}
-          <div className="flex md:hidden">
-            <button
-              type="button"
-              id="mobile-menu-toggle"
-              aria-label="Toggle mobile menu"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
-            >
-              {mobileMenuOpen ? (
-                <RiCloseLine className="size-5" />
-              ) : (
-                <RiMenuLine className="size-5" />
-              )}
-            </button>
-          </div>
+          {/* Mobile hamburger button - Only visible when signed in */}
+          <Show when="signed-in">
+            <div className="flex md:hidden">
+              <button
+                type="button"
+                id="mobile-menu-toggle"
+                aria-label="Toggle mobile menu"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800"
+              >
+                {mobileMenuOpen ? (
+                  <RiCloseLine className="size-5" />
+                ) : (
+                  <RiMenuLine className="size-5" />
+                )}
+              </button>
+            </div>
+          </Show>
         </div>
       </div>
 
       {/* Mobile menu dropdown */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-2 pb-4 space-y-1">
-          {navItems.map((item) => {
-            const isActive =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname?.startsWith(item.href);
-            const Icon = item.icon;
+      <Show when="signed-in">
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-2 pb-4 space-y-1">
+            {navItems.map((item) => {
+              const isActive =
+                item.href === "/"
+                  ? pathname === "/"
+                  : pathname?.startsWith(item.href);
+              const Icon = item.icon;
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={cx(
-                  "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-slate-100 text-blue-600 font-semibold dark:bg-slate-800 dark:text-blue-400"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60"
-                )}
-              >
-                <Icon className="size-4 shrink-0" />
-                {item.name}
-              </Link>
-            );
-          })}
-        </div>
-      )}
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cx(
+                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-slate-100 text-blue-600 font-semibold dark:bg-slate-800 dark:text-blue-400"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/60"
+                  )}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  {item.name}
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </Show>
     </header>
   );
 }

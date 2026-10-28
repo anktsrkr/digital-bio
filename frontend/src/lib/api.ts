@@ -83,8 +83,6 @@ export async function fetchWithAuth<T>(
 
   if (globalClerkUserId) {
     headers.set("X-User-Id", globalClerkUserId);
-  } else {
-    headers.set("X-User-Id", "dev_user_local");
   }
 
   const response = await fetch(url, {
@@ -190,8 +188,6 @@ export async function downloadPdf(id: string): Promise<Blob> {
   }
   if (globalClerkUserId) {
     headers["X-User-Id"] = globalClerkUserId;
-  } else {
-    headers["X-User-Id"] = "dev_user_local";
   }
 
   const response = await fetch(url, {
@@ -251,8 +247,6 @@ export async function downloadCvPdf(id: string, candidateName?: string): Promise
   }
   if (globalClerkUserId) {
     headers["X-User-Id"] = globalClerkUserId;
-  } else {
-    headers["X-User-Id"] = "dev_user_local";
   }
 
   const response = await fetch(url, {
