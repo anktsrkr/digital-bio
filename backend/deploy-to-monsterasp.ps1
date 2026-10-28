@@ -1,10 +1,14 @@
 param (
-    [string]$Server = ($env:MONSTERASP_FTP_SERVER ?? "site102544.siteasp.net"),
-    [string]$User = ($env:MONSTERASP_FTP_USER ?? "site102544"),
-    [string]$Pass = $env:MONSTERASP_FTP_PASSWORD,
+    [string]$Server = "site102544.siteasp.net",
+    [string]$User = "site102544",
+    [string]$Pass = "",
     [string]$RemoteRoot = "wwwroot",
     [switch]$SkipBuild
 )
+
+if (-not $Pass -and $env:MONSTERASP_FTP_PASSWORD) {
+    $Pass = $env:MONSTERASP_FTP_PASSWORD
+}
 
 if ([string]::IsNullOrWhiteSpace($Pass)) {
     Write-Host "FTP password not provided via -Pass or MONSTERASP_FTP_PASSWORD env var." -ForegroundColor Yellow
