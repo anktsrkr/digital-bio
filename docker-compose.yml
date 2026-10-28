@@ -1,0 +1,27 @@
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: cvbuilder-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - cvbuilder_mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=cvbuilder_dev
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: cvbuilder-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_BASICAUTH=false
+    depends_on:
+      - mongodb
+
+volumes:
+  cvbuilder_mongodb_data:
+    external: true

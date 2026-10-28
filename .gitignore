@@ -1,0 +1,52 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+*.local.ps1
+*.local.json
+
+# IDE and Editor files
+.vs/
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Frontend dependencies & build output
+node_modules/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/dist/
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts
+frontend/src/middleware.ts.server
+
+# Backend dependencies & build output
+bin/
+obj/
+backend/**/bin/
+backend/**/obj/
+backend/**/publish*/
+backend/**/appsettings.Production.json
+backend/**/appsettings.Local.json
+
+# Temporary / scratch files
+scratch/

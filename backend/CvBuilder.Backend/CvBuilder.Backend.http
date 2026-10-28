@@ -1,0 +1,133 @@
+@HostAddress = http://localhost:5139
+@AuthToken = Bearer YOUR_CLERK_JWT_TOKEN
+
+### 1. Health Check
+GET {{HostAddress}}/
+Accept: application/json
+
+### 2. OpenAPI Specification
+GET {{HostAddress}}/openapi/v1.json
+Accept: application/json
+
+### 3. List User CVs
+GET {{HostAddress}}/api/users/me/cvs
+Authorization: {{AuthToken}}
+Accept: application/json
+
+### 4. Create New CV Draft
+POST {{HostAddress}}/api/cvs
+Authorization: {{AuthToken}}
+Content-Type: application/json
+
+{
+  "title": "Principal .NET Engineer",
+  "templateKey": "navy",
+  "payload": {
+    "personal": {
+      "fullName": "Alex Morgan",
+      "headline": "Lead Cloud Architect",
+      "email": "alex.morgan@example.com",
+      "phone": "+44 7123 456789",
+      "location": "London, UK",
+      "links": ["https://linkedin.com/in/alexmorgan"]
+    },
+    "summary": "10+ years engineering high-throughput distributed systems.",
+    "keyAchievements": [
+      "Led migration of monolith to microservices saving £1.2M annually"
+    ],
+    "skills": [
+      { "name": ".NET 10", "category": "Backend" },
+      { "name": "MongoDB", "category": "Database" }
+    ],
+    "workExperience": [
+      {
+        "name": "FinTech Corp",
+        "role": "Principal Architect",
+        "dates": "2021 – Present",
+        "location": "London, UK",
+        "summary": "Core payments infrastructure lead.",
+        "engagements": [
+          {
+            "clientName": "Global Bank",
+            "roleContext": "Fast Payments Gateway",
+            "achievements": ["Achieved 99.999% availability"]
+          }
+        ],
+        "bullets": []
+      }
+    ]
+  }
+}
+
+### 5. Get CV by ID
+GET {{HostAddress}}/api/cvs/00000000-0000-0000-0000-000000000000
+Authorization: {{AuthToken}}
+Accept: application/json
+
+### 6. Update CV by ID
+PUT {{HostAddress}}/api/cvs/00000000-0000-0000-0000-000000000000
+Authorization: {{AuthToken}}
+Content-Type: application/json
+
+{
+  "title": "Updated Principal Engineer CV",
+  "templateKey": "teal",
+  "payload": {
+    "personal": {
+      "fullName": "Alex Morgan",
+      "headline": "Distinguished Architect",
+      "email": "alex.morgan@example.com",
+      "phone": "+44 7123 456789",
+      "location": "London, UK",
+      "links": []
+    },
+    "summary": "Updated summary text."
+  }
+}
+
+### 7. Set CV as Base
+POST {{HostAddress}}/api/cvs/00000000-0000-0000-0000-000000000000/set-base
+Authorization: {{AuthToken}}
+Accept: application/json
+
+### 8. Delete CV by ID
+DELETE {{HostAddress}}/api/cvs/00000000-0000-0000-0000-000000000000
+Authorization: {{AuthToken}}
+
+### 9. Get User Profile
+GET {{HostAddress}}/api/profile
+Authorization: {{AuthToken}}
+Accept: application/json
+
+### 10. Update User Profile
+PUT {{HostAddress}}/api/profile
+Authorization: {{AuthToken}}
+Content-Type: application/json
+
+{
+  "name": "Alex Morgan",
+  "email": "alex.morgan@example.com",
+  "preferences": ["Remote UK", "Permanent"],
+  "coverLetterHighlights": ["Specialised in distributed messaging and cloud infrastructure"]
+}
+
+### 11. Get AI Agent Settings
+GET {{HostAddress}}/api/settings/agents
+Authorization: {{AuthToken}}
+Accept: application/json
+
+### 12. Update AI Agent Setting
+PUT {{HostAddress}}/api/settings/agents/CvSectionWriter
+Authorization: {{AuthToken}}
+Content-Type: application/json
+
+{
+  "endpoint": "https://api.openai.com/v1",
+  "model": "gpt-4o",
+  "apiKey": "sk-your-openai-api-key"
+}
+
+### 13. Download CV as ATS PDF
+POST {{HostAddress}}/api/cvs/00000000-0000-0000-0000-000000000000/pdf
+Authorization: {{AuthToken}}
+Accept: application/pdf
