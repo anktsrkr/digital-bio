@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   RiArrowLeftLine,
   RiCheckLine,
@@ -55,7 +55,9 @@ type SaveStatus = "saved" | "saving" | "error" | "idle";
 
 export default function CvBuilderEditorPage() {
   const params = useParams();
-  const id = Array.isArray(params?.id) ? params.id[0] : (params?.id as string);
+  const searchParams = useSearchParams();
+  const rawId = Array.isArray(params?.id) ? params.id[0] : (params?.id as string);
+  const id = rawId || searchParams.get("id") || "";
 
   // Editor State
   const [title, setTitle] = useState("");
@@ -76,7 +78,11 @@ export default function CvBuilderEditorPage() {
 
   // 1. Load CV Draft
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      setIsLoading(false);
+      setLoadError("No CV ID specified. Please return to the Dashboard to select a CV.");
+      return;
+    }
     let isSubscribed = true;
 
     getCv(id)

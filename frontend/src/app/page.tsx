@@ -108,7 +108,7 @@ export default function DashboardPage() {
 
       toast.success("CV draft created successfully!");
       setIsCreateModalOpen(false);
-      router.push(`/cv-builder/${newCv.id}`);
+      router.push(`/cv-builder/?id=${newCv.id}`);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to create CV.";
       toast.error(msg);

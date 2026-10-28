@@ -117,7 +117,7 @@ export function CvCard({
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <h3 className="truncate text-base font-semibold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                <Link href={`/cv-builder/${cv.id}`} className="hover:underline">
+                <Link href={`/cv-builder/?id=${cv.id}`} className="hover:underline">
                   {cv.title || "Untitled CV"}
                 </Link>
               </h3>
@@ -191,7 +191,7 @@ export function CvCard({
               id={`btn-edit-${cv.id}`}
               title="Edit CV in builder"
             >
-              <Link href={`/cv-builder/${cv.id}`}>
+              <Link href={`/cv-builder/?id=${cv.id}`}>
                 <RiEditLine className="size-3.5" />
                 <span>Edit</span>
               </Link>
