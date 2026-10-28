@@ -12,7 +12,7 @@ import {
 } from "./types";
 
 const API_BASE = (
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5139"
+  process.env.NEXT_PUBLIC_API_URL || "https://mybiotwin.runasp.net"
 ).replace(/\/$/, "");
 
 type TokenGetter = () => Promise<string | null>;

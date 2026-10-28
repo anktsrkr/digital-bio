@@ -3,6 +3,8 @@
 import { SignUp } from "@clerk/react";
 
 export function SignUpClient() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
   return (
     <div className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md flex flex-col items-center">
@@ -19,9 +21,9 @@ export function SignUpClient() {
               footerActionLink: "text-blue-600 hover:text-blue-500 dark:text-blue-400 font-medium",
             },
           }}
-          routing="path"
-          path="/sign-up"
-          signInUrl="/sign-in"
+          routing="hash"
+          signInUrl={`${basePath}/sign-in`}
+          fallbackRedirectUrl={`${basePath}/`}
         />
       </div>
     </div>

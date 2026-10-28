@@ -8,6 +8,7 @@ import {
   UserButton,
   useAuth,
   useUser,
+  SignInButton,
 } from "@clerk/react";
 import {
   RiFileTextLine,
@@ -123,12 +124,12 @@ export function Navbar() {
           </Show>
 
           <Show when="signed-out">
-            <Button asChild size="sm" variant="primary">
-              <Link href="/sign-in" id="nav-signin-button">
+            <SignInButton mode="modal">
+              <Button size="sm" variant="primary" id="nav-signin-button">
                 <RiLoginBoxLine className="size-4" />
                 <span>Sign In</span>
-              </Link>
-            </Button>
+              </Button>
+            </SignInButton>
           </Show>
 
           {/* Mobile hamburger button */}
