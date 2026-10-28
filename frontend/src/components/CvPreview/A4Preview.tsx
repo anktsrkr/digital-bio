@@ -291,7 +291,7 @@ export function A4Preview({
   const a4WidthPx = 794;
 
   return (
-    <div className="flex justify-center w-full">
+    <div className="flex justify-center w-full min-w-full">
       {/* Outer bounding box that physically resizes with zoom to eliminate fake scrollbars */}
       <div
         style={{
@@ -299,6 +299,7 @@ export function A4Preview({
           height: `${Math.round(sheetHeight * scale)}px`,
           position: "relative",
           flexShrink: 0,
+          margin: "0 auto",
           transition: "width 0.15s ease, height 0.15s ease",
         }}
       >

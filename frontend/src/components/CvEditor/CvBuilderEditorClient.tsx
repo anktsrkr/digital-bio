@@ -69,8 +69,26 @@ export default function CvBuilderEditorPage() {
   // Save State
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
   const [isDownloading, setIsDownloading] = useState(false);
-  const [zoom, setZoom] = useState(100);
+  const [zoom, setZoom] = useState(60);
   const [mobileTab, setMobileTab] = useState<"edit" | "preview">("edit");
+  const previewContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-fit preview zoom to right column container width
+  const fitToWidth = useCallback(() => {
+    if (previewContainerRef.current) {
+      const containerWidth = previewContainerRef.current.clientWidth - 32;
+      if (containerWidth > 200) {
+        const computed = Math.min(130, Math.max(40, Math.floor((containerWidth / 794) * 100)));
+        setZoom(computed);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    fitToWidth();
+    window.addEventListener("resize", fitToWidth);
+    return () => window.removeEventListener("resize", fitToWidth);
+  }, [fitToWidth]);
 
   // Track if initial fetch completed to avoid auto-saving on mount
   const isHydratedRef = useRef(false);
@@ -279,7 +297,7 @@ export default function CvBuilderEditorPage() {
   return (
     <div className="flex-1 flex flex-col min-h-[calc(100vh-4rem)] bg-slate-100/60 dark:bg-slate-950">
       {/* ── Top Bar: Title, Template Selector, Save Status, Actions ───────── */}
-      <div className="sticky top-0 z-30 border-b border-slate-200/90 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95 px-4 py-2.5 sm:px-6">
+      <div className="sticky top-16 z-30 border-b border-slate-200/90 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95 px-4 py-2.5 sm:px-6">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
           {/* Left: Back button & Title */}
           <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -597,7 +615,7 @@ export default function CvBuilderEditorPage() {
 
           {/* ──── Right Pane: Sticky Live A4 Preview (cols 12 -> 5) ───────── */}
           <div
-            className={`lg:col-span-5 lg:sticky lg:top-20 space-y-3 ${mobileTab === "edit" ? "hidden lg:block" : "block"
+            className={`lg:col-span-5 lg:sticky lg:top-[7.25rem] space-y-3 ${mobileTab === "edit" ? "hidden lg:block" : "block"
               }`}
           >
             {/* Preview Toolbar */}
@@ -610,8 +628,17 @@ export default function CvBuilderEditorPage() {
               <div className="flex items-center gap-1">
                 <button
                   type="button"
-                  disabled={zoom <= 70}
-                  onClick={() => setZoom((z) => Math.max(70, z - 10))}
+                  onClick={fitToWidth}
+                  title="Auto fit to column width"
+                  aria-label="Auto fit preview"
+                  className="px-1.5 py-0.5 text-[11px] font-medium rounded hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 cursor-pointer"
+                >
+                  Fit
+                </button>
+                <button
+                  type="button"
+                  disabled={zoom <= 40}
+                  onClick={() => setZoom((z) => Math.max(40, z - 10))}
                   title="Zoom out preview"
                   aria-label="Zoom out preview"
                   className="p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30 cursor-pointer"
@@ -621,8 +648,8 @@ export default function CvBuilderEditorPage() {
                 <span className="w-9 text-center font-mono text-[11px]">{zoom}%</span>
                 <button
                   type="button"
-                  disabled={zoom >= 130}
-                  onClick={() => setZoom((z) => Math.min(130, z + 10))}
+                  disabled={zoom >= 140}
+                  onClick={() => setZoom((z) => Math.min(140, z + 10))}
                   title="Zoom in preview"
                   aria-label="Zoom in preview"
                   className="p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-800 disabled:opacity-30 cursor-pointer"
@@ -633,7 +660,10 @@ export default function CvBuilderEditorPage() {
             </div>
 
             {/* A4 Container Wrapper */}
-            <div className="w-full overflow-y-auto max-h-[calc(100vh-8rem)] rounded-xl border border-slate-200/90 bg-slate-200/50 p-2 sm:p-4 shadow-inner dark:border-slate-800 dark:bg-slate-900/50">
+            <div
+              ref={previewContainerRef}
+              className="w-full overflow-auto max-h-[calc(100vh-10rem)] rounded-xl border border-slate-200/90 bg-slate-200/50 p-2 sm:p-4 shadow-inner dark:border-slate-800 dark:bg-slate-900/50"
+            >
               <A4Preview
                 payload={payload}
                 templateKey={templateKey}
